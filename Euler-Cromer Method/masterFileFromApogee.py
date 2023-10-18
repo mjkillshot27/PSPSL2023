@@ -6,19 +6,14 @@ G = 6.674e-11
 M_earth = 5.972e24
 airDensity = 1.293 #kg/m^3
 dt = 0.1
-z0 = 1475.537
-v0 = 0
-v = v0
-z = z0
-V = v
-Z = z
+
+v = 0
+z = 1475.537 #change altitude
 m = 15.2237
-M = m
 tmax = 100
-Cd = 0.3
 g=9.8
-windSpeed = 5 * 0.447 #mph to meters/second
-altitude = [1475.537]
+windSpeed = 5 * 0.447 #Change windspeed mph to meters/second
+altitude = [1475.537] #change altitude
 velocity = [0]
 def dm (time, z):
     counter = 0
@@ -40,17 +35,16 @@ def area(time, z):
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
 for time in range(0,999):
-    #m = m - (dm(t[time], z)*dt)
+    m = m - (dm(t[time], z))
     parachuteDeploymentCounter = 0
     if z<=213.36 and parachuteDeploymentCounter == 0:
-        v = -2.52628
+        v = -2.7
         parachuteDeploymentCounter = parachuteDeploymentCounter +1
 
     drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m
     
-    if v < 0:
-        drag = drag*-1
-    v = v + (- drag - g)*dt
+
+    v = v + (-drag - g)*dt
     z = z + v*dt
     print("height")
     print(z)
@@ -64,8 +58,8 @@ for time in range(0,999):
     velocity.append(v)
     if z <0:
         break
-#plt.plot(t[0:(len(altitude)-1-1000)],altitude) diagnostics for plot with altitude and time
-#plt.show()
+plt.plot(t[0:(len(altitude)-1-1000)],altitude) #diagnostics for plot with altitude and time
+plt.show()
 x=[0]
 for time in range(0,len(altitude)-1):
     x.append(windSpeed*t[time])
