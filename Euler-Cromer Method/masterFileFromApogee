@@ -42,7 +42,7 @@ for time in range(0,999):
     #m = m - (dm(t[time], z)*dt)
     parachuteDeploymentCounter = 0
     if z<=213.36 and parachuteDeploymentCounter == 0:
-        v = 0
+        v = -2.52628
         parachuteDeploymentCounter = parachuteDeploymentCounter +1
 
     drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m
@@ -63,8 +63,8 @@ for time in range(0,999):
     velocity.append(v)
     if z <0:
         break
-plt.plot(t[0:-1],altitude)
-
+plt.plot(t[0:(816-1000)],altitude)
+plt.show()
 
 
 
