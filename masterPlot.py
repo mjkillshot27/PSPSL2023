@@ -23,11 +23,11 @@ for i in range(0,5):
     for j in range(0,500):
         horizontalDriftDistance[i].append(horizontalDisplacement(windSpeed[i], time[j]))
 for i in range(0,5):
-    for j in range(1,500):
-        if(verticalDistance[i],[j] > heightParachuteDeploy):
-            verticalDistance[i][j].append(verticalDisplacement(verticalDistance[i][j-1]), 0.2, terminalDescentVelocity(verticalDistance[i][j-1], massWithoutMotor, 0.3082, airDensity, (0.131318/2)(0.131318/2)*math.pi))
-        else:
-            verticalDistance[i][j].append(verticalDisplacement(verticalDistance[i][j-1]), 0.2, terminalDescentVelocity(verticalDistance[i][j-1], weightDescent(verticalDistance[i][j-1],massWithoutMotor, massPayload, heightPayloadDeployment), cDrag, airDensity, parachuteArea))
+    verticalDistance[i][j].append(verticalDisplacement(verticalDistance[i][j-1]), 0.2, terminalDescentVelocity(verticalDistance[i][j-1], weightDescent(verticalDistance[i][j-1],massWithoutMotor, massPayload, heightPayloadDeployment), cDrag, airDensity, parachuteArea))
+    #for j in range(1,500):
+       # if(verticalDistance[i],[j] > heightParachuteDeploy):
+       #     verticalDistance[i][j].append(verticalDisplacement(verticalDistance[i][j-1]), 0.2, terminalDescentVelocity(verticalDistance[i][j-1], massWithoutMotor, 0.3082, airDensity, (0.131318/2)(0.131318/2)*math.pi))
+       # else:
 fig, axs = plt.subplots(2,3)
 #horizontal displacement graphs
 axs[0,0].plot(time,horizontalDriftDistance[0])
