@@ -6,7 +6,7 @@ G = 6.674e-11
 M_earth = 5.972e24
 airDensity = 1.293 #kg/m^3
 dt = 0.1
-z0 = 1527.962
+z0 = 1475.537
 v0 = 0
 v = v0
 z = z0
@@ -17,7 +17,8 @@ M = m
 tmax = 100
 Cd = 0.3
 g=9.8
-altitude = [1527.962]
+windSpeed = 5 * 0.447 #mph to meters/second
+altitude = [1475.537]
 velocity = [0]
 def dm (time, z):
     counter = 0
@@ -63,8 +64,11 @@ for time in range(0,999):
     velocity.append(v)
     if z <0:
         break
-plt.plot(t[0:(816-1000)],altitude)
+#plt.plot(t[0:(len(altitude)-1-1000)],altitude) diagnostics for plot with altitude and time
+#plt.show()
+x=[0]
+for time in range(0,len(altitude)-1):
+    x.append(windSpeed*t[time])
+print(len(altitude))
+plt.plot(x, altitude)
 plt.show()
-
-
-
