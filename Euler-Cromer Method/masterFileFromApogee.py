@@ -8,12 +8,12 @@ airDensity = 1.293 #kg/m^3
 dt = 0.1
 
 v = 0
-z = 1281.316672 #change altitude
+z = 1496.263 #change altitude
 m = 15.2237
 tmax = 100
 g=9.8
-windSpeed = 20 * 0.447 #Change windspeed mph to meters/second
-altitude = [1281.316672] #change altitude
+windSpeed = 0 * 0.447 #Change windspeed mph to meters/second
+altitude = [1496.263] #change altitude
 velocity = [0]
 def dm (time, z):
     counter = 0
@@ -47,20 +47,20 @@ for time in range(0,999):
     v = v + (-drag - g)*dt
     z = z + v*dt
     
-    altitude.append(z)
-    velocity.append(v)
+    altitude.append(z*3.281)
+    velocity.append(v*3.281)
     if z <0:
         break
 fig, axs = plt.subplots(2)
-fig.suptitle('20 mph, 10 degrees')
+fig.suptitle('5 mph, 5 degrees')
 axs[0].plot(t[0:(len(altitude)-1-1000)],altitude) #diagnostics for plot with altitude and time
-axs[0].set(xlabel = 'Time (Seconds)', ylabel = 'Altitude (Meters)')
+axs[0].set(xlabel = 'Time (Seconds)', ylabel = 'Altitude (Feet)')
 
 x=[0]
 for time in range(0,len(altitude)-1):
-    x.append(windSpeed*t[time])
+    x.append(windSpeed*t[time]*3.281)
 print(len(altitude)-1)
 print(x[-1])
 axs[1].plot(x, altitude)
-axs[1].set(xlabel = 'Horizontal Drift (meters)', ylabel = 'Altitude (Meters)')
+axs[1].set(xlabel = 'Horizontal Drift (Feet)', ylabel = 'Altitude (Feet)')
 plt.show()
