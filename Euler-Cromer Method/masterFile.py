@@ -39,7 +39,7 @@ def area(time, z):
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
 for time in range(0,999):
-    m = m - (dm(t[time], z))
+    m = m - (dm(t[time], z)*dt)
     parachuteDeploymentCounter = 0
     if z<=213.36  and time>200 and parachuteDeploymentCounter == 0:
         v = -3
