@@ -39,7 +39,11 @@ def area(time, z):
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
 for time in range(0,999):
-    m = m - (dm(t[time], z)*dt)
+    m = m - (dm(t[time], z))
+    parachuteDeploymentCounter = 0
+    if z<=213.36  and time>200 and parachuteDeploymentCounter == 0:
+        v = -3
+        parachuteDeploymentCounter = parachuteDeploymentCounter +1
     drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m
     if v < 0:
         drag = drag*-1
@@ -53,13 +57,10 @@ for time in range(0,999):
     print(t[time])
     print("height")
     print(z)
-    altitude.append(z)
-    velocity.append(v)
+    altitude.append(z*3.281)
+    velocity.append(v*3.281)
     if z <0:
         break
-
-plt.plot(t,altitude)
-
-
-
-
+altitude.append(1)
+plt.plot(range(len(altitude)),altitude)
+plt.show()
