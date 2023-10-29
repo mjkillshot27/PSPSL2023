@@ -5,17 +5,17 @@ import math
 G = 6.674e-11
 M_earth = 5.972e24
 airDensity = 1.293 #kg/m^3
-dt = 0.1
+dt = 0.1 #time step
 
-v = 0
+v = 0 #initial velocity (m/s)
 z = 1496.263 #change altitude
-m = 15.2237
-tmax = 100
-g=9.8
+m = 15.2237 #initial mass
+tmax = 100# maximum time
+g=9.8 #gravitational acceleratin
 windSpeed = 0 * 0.447 #Change windspeed mph to meters/second
 altitude = [1496.263] #change altitude
-velocity = [0]
-def dm (time, z):
+velocity = [0] #initial velocity
+def dm (time, z): #change in mass
     counter = 0
     if z <= 152.4 and counter==0:
         counter= counter +1
@@ -23,17 +23,17 @@ def dm (time, z):
     else:
         return 0
     
-def Cd(time, z):
-    if z <= 213.36:
+def Cd(time, z): #drag coefficient
+    if z <= 213.36: #drag coefficient when parachute is deployed
         return 1.6
     else:
         return 0.3
-t = np.linspace(0,tmax,1001)
 def area(time, z):
     if time> 10 and z <= 213.36:
         return (3.048/2)*(3.048/2)*math.pi
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
+t = np.linspace(0,tmax,1001)
 for time in range(0,999):
     m = m - (dm(t[time], z))
     parachuteDeploymentCounter = 0
