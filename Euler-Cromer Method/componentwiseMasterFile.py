@@ -43,9 +43,10 @@ def area(time, z):
         return (3.048/2)*(3.048/2)*math.pi
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
-for time in range(0,300):
+parachuteDeploymentCounter = 0
+for time in range(0,20):
     m = m - (dm(t[time], z)*dt)
-    parachuteDeploymentCounter = 0
+    
     if z<=213.36  and time>200 and parachuteDeploymentCounter == 0:
         v = -3
         parachuteDeploymentCounter = parachuteDeploymentCounter +1
@@ -54,22 +55,24 @@ for time in range(0,300):
     print(drag)
     if v < 0:
         drag = drag*-1
-    v = v + (thrustProfile(t[time])/m - drag - g)*dt
-    vx = (v + (thrustProfile(t[time])/m - drag - g))*np.cos(angle * np.pi/180)*dt
+    #v = v + (thrustProfile(t[time])/m - drag - g)*dt
+    vx = (v + (thrustProfile(t[time])/m - drag - windSpeed))*np.cos(angle * np.pi/180)*dt
     vy = (v + (thrustProfile(t[time])/m - drag - g))*np.sin(angle * np.pi/180)*dt
-    if vx == 0:
+    v = np.sqrt(vx*vx+vy*vy)
+    if np.abs(vx) < 0.0001:
         angle = 90
     else:
         angle = np.arctan(vy/vx)
-    print("m",m)
-    print("v",v)
+    #print("m",m)
+    #print("v",v)
+    print("angle", angle)
     print("vx", vx)
     print("vy", vy)
     z = z + vy*dt
-    print("drag")
-    print(drag)
-    print("velocity")
-    print(v)
+    #print("drag")
+    #print(drag)
+    #print("velocity")
+    #print(v)
     print("time")
     print(t[time])
     print("height")
