@@ -23,9 +23,10 @@ tmax = 100
 Cd = 0.3
 g=9.8
 burnTime = 26 #tenths of seconds
-engineMass = 3.54369
-payloadDeploymentHeight = 500 #ft
-payloadMass = 3.40194
+engineMass = 3.54369 # in kg
+payloadDeploymentHeight = 152.4 #m
+payloadMass = 3.40194 # in kg
+parachuteDeploymentHeight = 213.36
 altitude = [0]
 velocity = [0]
 def dm (time, z):
@@ -37,7 +38,7 @@ def dm (time, z):
         return 0
     
 def Cd(time, z):
-    if time> 100 and z <= 213.36:
+    if time> 100 and z <= parachuteDeploymentHeight:
         return 1.6
     else:
         return 0.453
