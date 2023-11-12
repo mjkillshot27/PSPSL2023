@@ -26,12 +26,11 @@ def dm (time, z):
         return 3.40194
     else:
         return 0
-    
 def Cd(time, z):
     if time> 10 and z <= 213.36:
         return 1.6
     else:
-        return 0.3
+        return 0.453
 t = np.linspace(0,tmax,1001)
 def area(time, z):
     if time> 10 and z <= 213.36:
@@ -49,8 +48,7 @@ for time in range(0,999):
         drag = drag*-1
     v = v + (thrustProfile(t[time])/m - drag - g)*dt
     z = z + v*dt
-    print("drag")
-    print(drag)
+
     print("velocity")
     print(v)
     print("time")
