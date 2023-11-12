@@ -22,18 +22,22 @@ M = m
 tmax = 100
 Cd = 0.3
 g=9.8
+burnTime = 26 #tenths of seconds
+engineMass = 3.54369
+payloadDeploymentHeight = 500 #ft
+payloadMass = 3.40194
 altitude = [0]
 velocity = [0]
 def dm (time, z):
-    if time<2.6:
-        return (3.54369/2.6)
-    elif time>50 and z == 500:
-        return 3.40194
+    if time<burnTime: 
+        return (engineMass/burnTime)
+    elif time>50 and z == payloadDeploymentHeight:
+        return payloadMass
     else:
         return 0
     
 def Cd(time, z):
-    if time> 10 and z <= 213.36:
+    if time> 100 and z <= 213.36:
         return 1.6
     else:
         return 0.453
@@ -44,7 +48,7 @@ def area(time, z):
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
 parachuteDeploymentCounter = 0
-for time in range(0,20):
+for time in range(0,999):
     m = m - (dm(t[time], z)*dt)
     
     if z<=213.36  and time>200 and parachuteDeploymentCounter == 0:
