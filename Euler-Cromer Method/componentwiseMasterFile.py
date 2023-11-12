@@ -23,10 +23,9 @@ tmax = 100
 Cd = 0.3
 g=9.8
 burnTime = 26 #tenths of seconds
-engineMass = 3.54369 # in kg
-payloadDeploymentHeight = 152.4 #m
-payloadMass = 3.40194 # in kg
-parachuteDeploymentHeight = 213.36
+engineMass = 3.54369
+payloadDeploymentHeight = 500 #ft
+payloadMass = 3.40194
 altitude = [0]
 velocity = [0]
 def dm (time, z):
@@ -38,7 +37,7 @@ def dm (time, z):
         return 0
     
 def Cd(time, z):
-    if time> 100 and z <= parachuteDeploymentHeight:
+    if time> 100 and z <= 213.36:
         return 1.6
     else:
         return 0.453
@@ -49,43 +48,37 @@ def area(time, z):
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
 parachuteDeploymentCounter = 0
-for time in range(0,999):
-    m = m - (dm(t[time], z)*dt)
-    
-    if z<=213.36  and time>200 and parachuteDeploymentCounter == 0:
+for time in range(0, 999):
+    m = m - (dm(t[time], z) * dt)
+
+    if z <= 213.36 and time > 200 and parachuteDeploymentCounter == 0:
         v = -3
-        parachuteDeploymentCounter = parachuteDeploymentCounter +1
-    
-    drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m
-    print(drag)
+        parachuteDeploymentCounter = parachuteDeploymentCounter + 1
+
+    drag = 0.5 * airDensity * v * v * Cd(t[time], z) * area(t[time], z) / m
     if v < 0:
-        drag = drag*-1
-    #v = v + (thrustProfile(t[time])/m - drag - g)*dt
-    vx = (v + (thrustProfile(t[time])/m - drag - windSpeed))*np.cos(angle * np.pi/180)*dt
-    vy = (v + (thrustProfile(t[time])/m - drag - g))*np.sin(angle * np.pi/180)*dt
-    v = np.sqrt(vx*vx+vy*vy)
+        drag = drag * -1
+
+    thrust = thrustProfile(t[time])
+
+    vx = vx + (thrust / m - drag - windSpeed) * np.cos(angle) * dt
+    vy = vy + (thrust / m - drag - g) * np.sin(angle) * dt
+
+    v = np.sqrt(vx * vx + vy * vy)
+
     if np.abs(vx) < 0.0001:
         angle = 90
     else:
-        angle = np.arctan(vy/vx)
-    #print("m",m)
-    #print("v",v)
-    print("angle", angle)
-    print("vx", vx)
-    print("vy", vy)
-    z = z + vy*dt
-    #print("drag")
-    #print(drag)
-    #print("velocity")
-    #print(v)
-    print("time")
-    print(t[time])
-    print("height")
-    print(z)
-    altitude.append(z*3.281)
-    velocity.append(vy*3.281)
-    if z <0:
+        angle = np.arctan2(vy, vx)
+
+    z = z + vy * dt
+
+    altitude.append(z * 3.281)
+    velocity.append(v * 3.281)
+
+    if z < 0:
         break
+
 altitude.append(1)
 plt.plot(range(len(altitude)),altitude)
 plt.show()
