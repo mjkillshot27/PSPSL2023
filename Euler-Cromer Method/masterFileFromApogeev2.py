@@ -38,8 +38,8 @@ for time in range(0,999):   #
     m = m - (dm(t[time], z))
     parachuteDeploymentCounter = 0
     if z<=213.36 and parachuteDeploymentCounter == 0:
-        v = -2.45
-        parachuteDeploymentCounter = parachuteDeploymentCounter +1
+       v = -2.45
+       parachuteDeploymentCounter = parachuteDeploymentCounter +1
 
     drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m
     

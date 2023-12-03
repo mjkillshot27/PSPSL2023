@@ -78,7 +78,8 @@ for time in range(0, 999):
 
     if z < 0:
         break
-
+    print("vy", vy)
+    print('time', t[time])
 altitude.append(1)
 plt.plot(range(len(altitude)),altitude)
 plt.show()
