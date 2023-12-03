@@ -5,7 +5,6 @@ import math
 G = 6.674e-11
 M_earth = 5.972e24
 airDensity = 1.293 #kg/m^3
-dt = 0.1
 z0 = 0
 v0 = 0
 v = v0
@@ -20,6 +19,8 @@ windSpeed = 0
 m = 18.7674 #initial mass
 M = m
 tmax = 100
+amountOfIterations = 1000
+dt = tmax / amountOfIterations
 Cd = 0.3
 g=9.8
 burnTime = 26 #tenths of seconds
@@ -29,9 +30,11 @@ payloadMass = 3.40194
 altitude = [0]
 velocity = [0]
 def dm (time, z):
+    count = 0
     if time<burnTime: 
         return (engineMass/burnTime)
-    elif time>50 and z == payloadDeploymentHeight:
+    elif time>50 and z < payloadDeploymentHeight and count == 0:
+        count+=1
         return payloadMass
     else:
         return 0
@@ -41,14 +44,14 @@ def Cd(time, z):
         return 1.6
     else:
         return 0.453
-t = np.linspace(0,tmax,1001)
+t = np.linspace(0,tmax,amountOfIterations + 1)
 def area(time, z):
     if time> 10 and z <= 213.36:
         return (3.048/2)*(3.048/2)*math.pi
     else:
         return (0.131318/2)*(0.131318/2)*math.pi
 parachuteDeploymentCounter = 0
-for time in range(0, 999):
+for time in range(0, amountOfIterations):
     m = m - (dm(t[time], z) * dt)
 
     if z <= 213.36 and time > 200 and parachuteDeploymentCounter == 0:
@@ -61,8 +64,8 @@ for time in range(0, 999):
 
     thrust = thrustProfile(t[time])
 
-    vx = vx + (thrust / m - drag - windSpeed) * np.cos(angle) * dt
-    vy = vy + (thrust / m - drag - g) * np.sin(angle) * dt
+    vx = vx + (thrust / m - drag) * np.cos(angle) * dt -windSpeed * dt
+    vy = vy + (thrust / m - drag) * np.sin(angle) * dt - g*dt
 
     v = np.sqrt(vx * vx + vy * vy)
 
@@ -81,5 +84,6 @@ for time in range(0, 999):
     print("vy", vy)
     print('time', t[time])
 altitude.append(1)
+print(t)
 plt.plot(range(len(altitude)),altitude)
 plt.show()
