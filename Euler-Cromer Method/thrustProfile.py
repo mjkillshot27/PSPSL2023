@@ -1,19 +1,13 @@
-def thrustProfile(time):
-    if time < 0.0465839:
-        return -2664.869*time + 1365.520
-    elif time < .48913:
-        return 701.260*time + 1208.713
-    elif time< 1.01708:
-        return 32.674*time + 1535.738
-    elif time< 1.99534:
-        return 35.246*time + 1533.123
-    elif time< 2.3913:
-        return -43.540*time + 1690.327
-    elif time <2.48447:
-        return 1850.488*time - 2838.863
-    elif time <2.50776:
-        return -71067.926*time + 178324.750
-    elif time <2.6:
-        return -1121.509*time + 2915.924
+def thrustProfile(time):   
+    thrustTimes = [0, 0.00776398, 0.0465839, 0.48913, 1.01708, 1.99534, 2.3913, 2.48447, 2.50776, 2.6]
+    thrustValues = [0, 1344.83, 1241.38, 1551.72, 1568.97, 1603.45, 1586.21, 1758.62, 103.448, 0]
+    if time <= time[len(time) - 1]:
+        for i in range(len(thrustTimes)-1):
+            if time > thrustTimes[i]:
+                fromPoint = time - thrustTimes[i]
+                perFromPoint = thrustTimes[i+1] - thrustTimes[i]
+                diffThrust = thrustValues[i+1] - thrustValues[i]
+                thrust = thrustValues[i] + fromPoint * diffThrust / perFromPoint
     else:
-        return 0
+        thrust = 0
+    return thrust
