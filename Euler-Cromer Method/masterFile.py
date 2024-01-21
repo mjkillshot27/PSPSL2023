@@ -50,6 +50,9 @@ for time in range(0,999):
     z = z + v*dt
 
     print("velocity")
+    print("thrust")
+    print(thrustProfile(t[time]))
+
     print(v)
     print("time")
     print(t[time])
