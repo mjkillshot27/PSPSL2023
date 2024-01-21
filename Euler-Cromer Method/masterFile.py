@@ -14,6 +14,10 @@ V = v
 Z = z
 m = 18.7674 #initial mass
 M = m
+MDIA = 213.36 #initial main parachute deployment
+MDFA = MDIA - (100/3.281) #main parachute final deployment
+AMTF = (3.048/2) * (3.048/2) * math.pi #Final area of main parachute top
+AMTI = (0.131318/2)*(0.131318/2)*math.pi #Initital area of main parachute top
 tmax = 100
 Cd = 0.3
 g=9.8
@@ -33,10 +37,15 @@ def Cd(time, z):
         return 0.453
 t = np.linspace(0,tmax,1001)
 def area(time, z):
-    if time> 10 and z <= 213.36:
-        return (3.048/2)*(3.048/2)*math.pi
+    k = (1 / (MDFA - MDIA)) * math.log(AMTF, AMTI)
+    C = AMTI * -k ** MDIA
+    if z <= MDIA and z >= MDFA and v < 0:
+        AMT = C * k ** z
+    elif z < MDFA and v < 0:
+        AMT = AMTF
     else:
-        return (0.131318/2)*(0.131318/2)*math.pi
+        AMT = AMTI
+    return AMT
 for time in range(0,999):
     m = m - (dm(t[time], z)*dt)
     parachuteDeploymentCounter = 0
