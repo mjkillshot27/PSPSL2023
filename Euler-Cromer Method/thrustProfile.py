@@ -1,5 +1,5 @@
 def thrustProfile(time):   
-    thrust = 10
+    thrust = 500
     thrustTimes = [0, 0.00776398, 0.0465839, 0.48913, 1.01708, 1.99534, 2.3913, 2.48447, 2.50776, 2.6]
     thrustValues = [0, 1344.83, 1241.38, 1551.72, 1568.97, 1603.45, 1586.21, 1758.62, 103.448, 0]
     if time <= thrustTimes[len(thrustTimes) - 1]:
