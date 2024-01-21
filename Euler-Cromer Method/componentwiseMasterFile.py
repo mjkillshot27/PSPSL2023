@@ -25,7 +25,7 @@ Cd = 0.3
 g=9.8
 burnTime = 26 #tenths of seconds
 engineMass = 3.54369
-payloadDeploymentHeight = 500 #ft
+payloadDeploymentHeight = 152.4 #ft
 payloadMass = 3.40194
 altitude = [0]
 velocity = [0]
@@ -40,7 +40,7 @@ def dm (time, z):
         return 0
     
 def Cd(time, z):
-    if time> 100 and z <= 213.36:
+    if time > 100 and z <= 213.36:
         return 1.6
     else:
         return 0.453
@@ -84,6 +84,5 @@ for time in range(0, amountOfIterations):
     print("vy", vy)
     print('time', t[time])
 altitude.append(1)
-print(t)
 plt.plot(range(len(altitude)),altitude)
 plt.show()
