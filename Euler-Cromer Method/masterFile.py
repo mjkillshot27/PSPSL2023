@@ -12,17 +12,25 @@ v = v0
 z = z0
 V = v
 Z = z
+x = 0 #lateral position
+vx = 0 #lateral velocity
+windspeed = 5   
 m = 18.7674 #initial mass
 M = m
+theta = (5) * math.pi / 180 #initial launch angle || degs -> rads
 MDIA = 213.36 #initial main parachute deployment
 MDFA = MDIA - (100/3.281) #main parachute final deployment
 AMTF = (3.048/2) ** 2 * math.pi #Final area of main parachute top
 AMTI = (0.131318/2) ** 2 * math.pi #Initital area of main parachute top
+AMSF = AMTF / 2
+AMSI = 1 #initial length of parachute
 tmax = 100
 Cd = 0.3
 g=9.8
 altitude = [0]
 velocity = [0]
+lat_vel = [0]
+lat_pos = [0]
 def dm (time, z):
     if time<2.6:
         return (3.54369/2.6)
@@ -36,6 +44,16 @@ def Cd(time, z):
     else:
         return 0.453
 t = np.linspace(0,tmax,1001)
+def side_area(time, z):
+    k = (1 / (MDFA - MDIA)) * math.log(AMSF, AMSI)
+    C = AMSI * -k ** MDIA
+    if z <= MDIA and z >= MDFA and v < 0:
+        AMS = C * k ** z
+    elif z < MDFA and v < 0:
+        AMS = AMSF
+    else:
+        AMS = AMSI
+    return AMS
 def area(time, z):
     k = (1 / (MDFA - MDIA)) * math.log(AMTF, AMTI)
     C = AMTI * -k ** MDIA
@@ -55,8 +73,10 @@ for time in range(0,999):
     drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m
     if v < 0:
         drag = drag*-1
-    v = v + (thrustProfile(t[time])/m - drag - g)*dt
-    z = z + v*dt
+    v = v + ((thrustProfile(t[time])/m ) * math.cos(theta) - drag - g)  * dt
+    vx = vx + (thrustProfile(t[time])/m * math.sin(theta) - windspeed) * dt 
+    z = z + v * dt
+    x = x + vx * dt
 
     print("velocity")
     print("thrust")
@@ -69,8 +89,13 @@ for time in range(0,999):
     print(z)
     altitude.append(z*3.281)
     velocity.append(v*3.281)
+    lat_vel.append(vx * 3.281)
+    lat_pos.append(x * 3.281)
     if z <0:
         break
 altitude.append(1)
 plt.plot(range(len(altitude)),altitude)
+plt.show()
+
+plt.plot(range(len(lat_pos)), lat_pos)
 plt.show()
