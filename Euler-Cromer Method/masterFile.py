@@ -17,13 +17,13 @@ vx = 0 #lateral velocity
 windspeed = 5   
 m = 18.7674 #initial mass
 M = m
-theta = (5) * math.pi / 180 #initial launch angle || degs -> rads
-MDIA = 213.36 #initial main parachute deployment
-MDFA = MDIA - (100/3.281) #main parachute final deployment
-AMTF = (3.048/2) ** 2 * math.pi #Final area of main parachute top
-AMTI = (0.131318/2) ** 2 * math.pi #Initital area of main parachute top
-AMSF = AMTF / 2
-AMSI = 1 #initial length of parachute
+theta = (0) * math.pi / 180 #initial launch angle || degs -> rads
+main_deploy_alt = 213.36 #initial main parachute deployment altitude (m)
+main_full_alt = main_deploy_alt - (100/3.281) #main parachute final deployment altitude (m)
+main_deploy_area_top= (3.048/2) ** 2 * math.pi #Final area of main parachute top (m^2)
+main_full_area_top = (0.131318/2) ** 2 * math.pi #Initital area of main parachute top (m^2)
+main_full_area_side = main_full_area_top / 2
+main_deploy_side  = 1 #initial length of parachute
 tmax = 100
 Cd = 0.3
 g=9.8
@@ -31,6 +31,7 @@ altitude = [0]
 velocity = [0]
 lat_vel = [0]
 lat_pos = [0]
+def drag()
 def dm (time, z):
     if time<2.6:
         return (3.54369/2.6)
@@ -45,24 +46,24 @@ def Cd(time, z):
         return 0.453
 t = np.linspace(0,tmax,1001)
 def side_area(time, z):
-    k = (1 / (MDFA - MDIA)) * math.log(AMSF, AMSI)
-    C = AMSI * -k ** MDIA
-    if z <= MDIA and z >= MDFA and v < 0:
+    k = (1 / (main_full_alt - main_deploy_alt)) * math.log(main_full_area_side, main_deploy_side)
+    C = main_deploy_side * -k ** main_deploy_alt
+    if z <= main_deploy_alt and z >= main_full_alt and v < 0:
         AMS = C * k ** z
-    elif z < MDFA and v < 0:
-        AMS = AMSF
+    elif z < main_full_alt and v < 0:
+        AMS = main_full_area_side
     else:
-        AMS = AMSI
+        AMS = main_deploy_side
     return AMS
 def area(time, z):
-    k = (1 / (MDFA - MDIA)) * math.log(AMTF, AMTI)
-    C = AMTI * -k ** MDIA
-    if z <= MDIA and z >= MDFA and v < 0:
+    k = (1 / (main_full_alt - main_deploy_alt)) * math.log(main_full_area_top, main_deploy_area_top)
+    C = main_deploy_area_top * -k ** main_deploy_alt
+    if z <= main_deploy_alt and z >= main_full_alt and v < 0:
         AMT = C * k ** z
-    elif z < MDFA and v < 0:
-        AMT = AMTF
+    elif z < main_full_alt and v < 0:
+        AMT = main_full_area_top
     else:
-        AMT = AMTI
+        AMT = main_deploy_area_top
     return AMT
 for time in range(0,999):
     m = m - (dm(t[time], z)*dt)
