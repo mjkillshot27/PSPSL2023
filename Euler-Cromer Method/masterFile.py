@@ -31,7 +31,13 @@ altitude = [0]
 velocity = [0]
 lat_vel = [0]
 lat_pos = [0]
-def drag()
+def side_drag(par_area, rocket_area, par_cd, rocket_cd, speed, time, theta):
+    dir_rocket_area = math.sin(theta) * rocket_area
+    rocket_drag = dir_rocket_area * speed ** 2 * rocket_cd
+    par_drag = par_area * par_cd * speed ** 2
+    total_drag = par_drag + rocket_drag
+    return(total_drag)
+
 def dm (time, z):
     if time<2.6:
         return (3.54369/2.6)
