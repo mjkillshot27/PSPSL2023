@@ -16,14 +16,14 @@ V = v
 Z = z
 x = 0 #lateral position, m
 vx = 0 #lateral velocity, m/s
-windspeed = 5 #m/s
+windspeed = 4.47 #m/s
 m = 17.423 #initial mass in kgs 
 M = m
-theta = (0) * math.pi / 180 #initial launch angle || degs -> rads
+theta = (7.5) * math.pi / 180 #initial launch angle || degs -> rads
 main_deploy_alt = 213.36 #initial main parachute deployment altitude (m)
 main_full_alt = main_deploy_alt - (100/3.281) #main parachute final deployment altitude (m)
-main_deploy_area_top= (3.048/2) ** 2 * math.pi #Final area of main parachute top (m^2)
-main_full_area_top = (0.131318/2) ** 2 * math.pi #Initital area of main parachute top (m^2), potentially change variable name
+main_full_area_top = (3.048/2) ** 2 * math.pi #Final area of main parachute top (m^2)
+main_deploy_area_top = (0.131318/2) ** 2 * math.pi #Initital area of main parachute top (m^2), potentially change variable name
 main_full_area_side = main_full_area_top / 2
 main_deploy_side  = 1 #initial length of parachute
 tmax = 100 #Seconds
@@ -54,9 +54,9 @@ def dm (time, z):
 #Take a look at open rocket
 def Cd(time, z):
     if time> 10 and z <= 213.36:
-        return 1.2
+        return 1.2#1.2
     else:
-        return 0.453
+        return 0.5#0.453
 
 def Cd_side(time, z):
     if time > 101 and z <= 213.36:
@@ -98,22 +98,28 @@ def area(time, z):
     return AMT
 
 parachuteDeploymentCounter = 0
-for time in range(0,999):
+for time in range(1,999):
     #Mass based on loss propellant and then eventually the lost payload
     m = m - (dm(t[time], z)*dt)
     
     if z<=213.36  and time>200 and parachuteDeploymentCounter == 0:
         v = -3
         parachuteDeploymentCounter = parachuteDeploymentCounter +1
-    #Add side drag from side area
+    #Add side drag from side are
     drag = 0.5 *airDensity * v * v *Cd(t[time], z)*area(t[time], z) / m 
     if v < 0:
         drag = drag*-1
     v = v + ((thrustProfile(t[time])/m ) * math.cos(theta) - drag - g)  * dt
-    vx = vx + (thrustProfile(t[time])/m * math.sin(theta) - windspeed) * dt 
+    vx = vx + (thrustProfile(t[time])/m * math.sin(theta)) * dt
+    if(z*3.281> 5000):
+        vx=0
     z = z + v * dt
-    x = x + vx * dt
-    
+    x = x + (vx - windspeed) * dt
+    print("velocityx")
+    print(vx)
+    """
+    print("area")
+    print(area(t[time], z))
     print("velocity")
     print(v)
     print("thrust")
@@ -122,7 +128,7 @@ for time in range(0,999):
     print("time")
     print(t[time])
     print("height")
-    print(z)
+    print(z)"""
     
     altitude.append(z*3.281)
     velocity.append(v*3.281)
@@ -133,9 +139,10 @@ for time in range(0,999):
 altitude.append(1)
 
 #plt.plot(range(len(altitude)),altitude)
+print(lat_pos)
 plt.plot(np.arange(0, len(altitude)/10, 0.1), altitude)
 plt.show()
 
-plt.plot(range(len(lat_pos)), lat_pos)
+plt.plot((np.arange(0, len(lat_pos)))/10, lat_pos)
 plt.title
 plt.show()

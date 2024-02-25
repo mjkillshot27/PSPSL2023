@@ -21,3 +21,4 @@ def thrustProfile(time):
     else:
         thrust = 0
     return thrust
+#print(thrustProfile(3))
